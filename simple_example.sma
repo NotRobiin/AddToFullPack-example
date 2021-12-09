@@ -3,6 +3,9 @@
 
 #define AUTHOR "Wicked - amxx.pl/user/60210-wicked/"
 
+#define HIDE_ENT 0
+#define SHOW_ENT 1
+
 static const PDATA_SAFE = 2;
 
 public plugin_init()
@@ -26,23 +29,22 @@ public AddToFullPack(es, other, other_ent, player, hostflags, ent_is_player, pSe
     // Dont affect dead players
     if(!is_user_alive(player))
     {
-        return 1;
+        return SHOW_ENT;
     }
 
     // Make sure the ent has pev data.
     if(pev_valid(other) != PDATA_SAFE)
     {
-        return 1;
+        return SHOW_ENT;
     }
 
     new class[15];
-
     pev(other, pev_classname, class, charsmax(class));
 
     // Check the classname of dropped weapon.
     if(!equal(class, "weaponbox"))
     {
-        return 1;
+        return SHOW_ENT;
     }
 
     new f = get_user_flags(player);
@@ -51,11 +53,11 @@ public AddToFullPack(es, other, other_ent, player, hostflags, ent_is_player, pSe
     // Make sure the player is an admin.
     if(!(f & required))
     {
-        return 1;
+        return SHOW_ENT;
     }
 
     // Hide the weapon entity.
     set_es(es, ES_Effects, EF_NODRAW);
 
-    return 0
+    return HIDE_ENT;
 }
